@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Journey - Jessica Renz</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #faf9f7;
+      color: #2d2d2d;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 60px;
+      color: #1a1a1a;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    /* Year markers on the left */
+    .year-marker {
+      position: absolute;
+      left: 0;
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #888;
+      width: 60px;
+      text-align: right;
+    }
+
+    /* Main vertical line */
+    .main-line {
+      position: absolute;
+      left: 80px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, #c9d6c3, #a8c5a0, #7db37a);
+      border-radius: 2px;
+    }
+
+    /* Timeline row */
+    .timeline-row {
+      position: relative;
+      min-height: 80px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      padding-left: 100px;
+    }
+
+    /* Connector dot on main line */
+    .connector-dot {
+      position: absolute;
+      left: 74px;
+      top: 12px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid #7db37a;
+      z-index: 2;
+    }
+
+    /* Branch container for parallel items */
+    .branch-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .branch-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Individual timeline items */
+    .timeline-item {
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-left: 4px solid;
+      max-width: 320px;
+      min-width: 200px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .timeline-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    /* Category colors */
+    .timeline-item.education {
+      border-left-color: #5b8c5a;
+      background: linear-gradient(135deg, #fff 0%, #f4f9f4 100%);
+    }
+
+    .timeline-item.work {
+      border-left-color: #c17f59;
+      background: linear-gradient(135deg, #fff 0%, #fdf8f5 100%);
+    }
+
+    .timeline-item.award {
+      border-left-color: #d4a84b;
+      background: linear-gradient(135deg, #fff 0%, #fffcf5 100%);
+    }
+
+    .timeline-item.milestone {
+      border-left-color: #6b8cae;
+      background: linear-gradient(135deg, #fff 0%, #f5f8fb 100%);
+    }
+
+    .timeline-item.engagement {
+      border-left-color: #9b7bb8;
+      background: linear-gradient(135deg, #fff 0%, #f9f5fc 100%);
+    }
+
+    .item-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+      color: #1a1a1a;
+    }
+
+    .item-subtitle {
+      font-size: 0.82rem;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .item-location {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+    }
+
+    .legend-dot.education { background: #5b8c5a; }
+    .legend-dot.work { background: #c17f59; }
+    .legend-dot.award { background: #d4a84b; }
+    .legend-dot.milestone { background: #6b8cae; }
+    .legend-dot.engagement { background: #9b7bb8; }
+
+    /* Parallel indicator */
+    .parallel-bracket {
+      position: absolute;
+      left: 90px;
+      width: 8px;
+      border: 2px solid #ccc;
+      border-right: none;
+      border-radius: 8px 0 0 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .timeline-item {
+        max-width: 100%;
+        min-width: 150px;
+      }
+      
+      .branch-row {
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .year-marker {
+        font-size: 1.1rem;
+        width: 50px;
+      }
+
+      .timeline-row {
+        padding-left: 80px;
+      }
+
+      .main-line {
+        left: 60px;
+      }
+
+      .connector-dot {
+        left: 54px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>My Academic Journey</h1>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot education"></div>
+        <span>Education</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot work"></div>
+        <span>Work</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot award"></div>
+        <span>Awards</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot milestone"></div>
+        <span>Milestones</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot engagement"></div>
+        <span>Engagement</span>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="main-line"></div>
+
+      <!-- 2014 -->
+      <div class="timeline-row">
+        <div class="year-marker">2014</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item milestone">
+              <div class="item-title">Abitur</div>
+              <div class="item-subtitle">+ DMV Abiturpreis</div>
+              <div class="item-location">Lichtenstern-Gymnasium, Sachsenheim</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2014-2016 -->
+      <div class="timeline-row">
+        <div class="year-marker">2014</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item education">
+              <div class="item-title">Lehramt Biology & Math</div>
+              <div class="item-subtitle">State Examination for teaching at German high schools</div>
+              <div class="item-location">Uni Stuttgart + Uni Hohenheim (simultaneously)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2016 -->
+      <div class="timeline-row">
+        <div class="year-marker">2016</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item education">
+              <div class="item-title">B.Sc. Mathematics</div>
+              <div class="item-subtitle">Started in parallel to Lehramt</div>
+              <div class="item-location">University of Stuttgart</div>
+            </div>
+            <div class="timeline-item work">
+              <div class="item-title">Practical Teaching Semester</div>
+              <div class="item-subtitle">Teaching Biology & Math at a high school</div>
+              <div class="item-location">Friedrich-Schiller-Gymnasium, Ludwigsburg</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2017 -->
+      <div class="timeline-row">
+        <div class="year-marker">2017</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item engagement">
+              <div class="item-title">Student Council Mathematics</div>
+              <div class="item-subtitle">Active member until 2022</div>
+              <div class="item-location">University of Stuttgart</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2018 -->
+      <div class="timeline-row">
+        <div class="year-marker">2018</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item engagement">
+              <div class="item-title">Youth Team Leader</div>
+              <div class="item-subtitle">Leading the youth section until 2022</div>
+              <div class="item-location">Musikverein Stadtkapelle Sachsenheim</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2019 -->
+      <div class="timeline-row">
+        <div class="year-marker">2019</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item education">
+              <div class="item-title">B.Sc. Completed</div>
+              <div class="item-subtitle">Thesis: "Die Picard- und Jacobi-Varietät einer Riemannschen Fläche"</div>
+              <div class="item-location">University of Stuttgart</div>
+            </div>
+            <div class="timeline-item education">
+              <div class="item-title">1. Staatsexamen Completed</div>
+              <div class="item-subtitle">Biology & Mathematics</div>
+              <div class="item-location">Uni Stuttgart + Uni Hohenheim</div>
+            </div>
+          </div>
+          <div class="branch-row">
+            <div class="timeline-item work">
+              <div class="item-title">Working Student</div>
+              <div class="item-subtitle">Project Management & Electronics Development</div>
+              <div class="item-location">Bertrandt AG, Mönsheim</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2019-2020 -->
+      <div class="timeline-row">
+        <div class="year-marker">2019</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item work">
+              <div class="item-title">Internship → Working Student</div>
+              <div class="item-subtitle">Actuarial Controlling (until Dec 2021)</div>
+              <div class="item-location">SV SparkassenVersicherung, Stuttgart</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2020 -->
+      <div class="timeline-row">
+        <div class="year-marker">2020</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item education">
+              <div class="item-title">M.Sc. Mathematics</div>
+              <div class="item-subtitle">Focus on Algebraic Geometry</div>
+              <div class="item-location">University of Stuttgart</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2021 -->
+      <div class="timeline-row">
+        <div class="year-marker">2021</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item award">
+              <div class="item-title">Deutschlandstipendium</div>
+              <div class="item-subtitle">National scholarship (until March 2022)</div>
+              <div class="item-location">Germany</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2022 Spring -->
+      <div class="timeline-row">
+        <div class="year-marker">2022</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item education">
+              <div class="item-title">Semester Abroad</div>
+              <div class="item-subtitle">The trip there was... eventful</div>
+              <div class="item-location">University of Bergen, Norway</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2022 -->
+      <div class="timeline-row">
+        <div class="year-marker">2022</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item education">
+              <div class="item-title">M.Sc. Completed</div>
+              <div class="item-subtitle">Thesis: "Protein Sequences and Tropical Geometry"</div>
+              <div class="item-location">University of Stuttgart</div>
+            </div>
+            <div class="timeline-item award">
+              <div class="item-title">Prima! Preis</div>
+              <div class="item-subtitle">Award for outstanding theses by female graduates</div>
+              <div class="item-location">Gender Equality Office, Uni Stuttgart</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2022 PhD Start -->
+      <div class="timeline-row">
+        <div class="year-marker">2022</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item education">
+              <div class="item-title">PhD in Statistics</div>
+              <div class="item-subtitle">Learning and predicting the pathways of AMR evolution with hypercubic inference</div>
+              <div class="item-location">University of Bergen, Norway</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2024 -->
+      <div class="timeline-row">
+        <div class="year-marker">2024</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item award">
+              <div class="item-title">Poster Prize</div>
+              <div class="item-subtitle">Nordic AMR Research Center Conference</div>
+              <div class="item-location">Tromsø, Norway</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2026 -->
+      <div class="timeline-row">
+        <div class="year-marker">2026</div>
+        <div class="connector-dot"></div>
+        <div class="branch-container">
+          <div class="branch-row">
+            <div class="timeline-item milestone">
+              <div class="item-title">PhD Completion</div>
+              <div class="item-subtitle">Expected August 2026</div>
+              <div class="item-location">University of Bergen, Norway</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
